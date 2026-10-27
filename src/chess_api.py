@@ -3,6 +3,7 @@ from chessdotcom import Client
 import chess.pgn
 import io
 import random
+import re
 import logging
 from datetime import datetime
 from config import USER_AGENT
@@ -85,6 +86,113 @@ def get_random_old_game(username, max_moves=100):
     except Exception as e:
         logger.error(f"Error fetching random game for {username}: {e}")
         return None
+
+def get_random_unedited_game(username, history, max_plies=100, min_plies=0, time_class=None, max_months=12):
+    """
+    A random game of the user's that isn't in `history` (a list of game links or IDs).
+    Looks through archive months in random order; only games with min_plies..max_plies half-moves,
+    of the given time class ("rapid", "blitz", ...; None = any) and not abandoned count.
+    Returns the PGN string or None if no month had a match.
+    """
+    done = {parse_game_id(h) or h for h in history}
+    try:
+        archives = chess_api.get_player_game_archives(username).json['archives']
+        months = random.sample(archives, len(archives))
+        for archive_url in months[:max_months]:
+            parts = archive_url.split('/')
+            games = chess_api.get_player_games_by_month(username, year=parts[-2], month=parts[-1]).json['games']
+            valid = []
+            for g in games:
+                pgn_str = g.get('pgn')
+                game_id = parse_game_id(g.get('url', ''))
+                if not pgn_str or not game_id or game_id in done:
+                    continue
+                if time_class and g.get('time_class') != time_class:
+                    continue
+                if "abandoned" in (g.get('white', {}).get('result'), g.get('black', {}).get('result')):
+                    continue
+                if min_plies <= _count_moves(pgn_str) <= max_plies:
+                    valid.append(pgn_str)
+            if valid:
+                return random.choice(valid)
+            logger.info(f"No unedited games that fit in {parts[-2]}/{parts[-1]}; trying another month.")
+        logger.info(f"No unedited games that fit in {min(max_months, len(months))} months.")
+        return None
+    except Exception as e:
+        logger.error(f"Error picking a random game for {username}: {e}")
+        return None
+
+
+def get_recent_good_game(username, history, max_plies=200, min_plies=0, time_class=None, months=6, rating_margin=100):
+    """
+    A random unedited game from the user's last `months` archive months, played while the user's rating was
+    good: at most `rating_margin` below the user's best rating in those games. Same filters as
+    get_random_unedited_game. Returns the PGN string or None if no game fits.
+    """
+    done = {parse_game_id(h) or h for h in history}
+    me = username.lower()
+    try:
+        archives = chess_api.get_player_game_archives(username).json['archives']
+        pool = []  # (user rating, pgn)
+        for archive_url in reversed(archives[-months:]):
+            parts = archive_url.split('/')
+            games = chess_api.get_player_games_by_month(username, year=parts[-2], month=parts[-1]).json['games']
+            for g in games:
+                pgn_str = g.get('pgn')
+                game_id = parse_game_id(g.get('url', ''))
+                if not pgn_str or not game_id or game_id in done:
+                    continue
+                if time_class and g.get('time_class') != time_class:
+                    continue
+                white, black = g.get('white', {}), g.get('black', {})
+                if "abandoned" in (white.get('result'), black.get('result')):
+                    continue
+                mine = white if white.get('username', '').lower() == me else black
+                if not mine.get('rating') or not min_plies <= _count_moves(pgn_str) <= max_plies:
+                    continue
+                pool.append((mine['rating'], pgn_str))
+        if not pool:
+            logger.info(f"No unedited games that fit in the last {months} months.")
+            return None
+        best = max(r for r, _ in pool)
+        good = [p for r, p in pool if r >= best - rating_margin]
+        logger.info(f"{len(good)} unedited games from the last {months} months played at {best - rating_margin}+ "
+                    f"(best rating there: {best}).")
+        return random.choice(good)
+    except Exception as e:
+        logger.error(f"Error picking a recent game for {username}: {e}")
+        return None
+
+
+def parse_game_id(game_ref):
+    """'185153537828', 'https://www.chess.com/game/live/185153537828?move=3' -> '185153537828' (None if no ID)."""
+    match = re.search(r"(\d{5,})(?!.*\d{5,})", game_ref or "")
+    return match.group(1) if match else None
+
+
+def get_game_by_id(username, game_ref):
+    """
+    Finds one of the user's games by its chess.com link or ID, searching the archives from the newest month back.
+    Returns the PGN string or None if it isn't found.
+    """
+    game_id = parse_game_id(game_ref)
+    if not game_id:
+        logger.error(f"'{game_ref}' doesn't look like a chess.com game link or ID.")
+        return None
+    try:
+        archives = chess_api.get_player_game_archives(username).json
+        for archive_url in reversed(archives['archives']):
+            parts = archive_url.split('/')
+            games = chess_api.get_player_games_by_month(username, year=parts[-2], month=parts[-1]).json
+            for game in games['games']:
+                if game.get('url', '').rstrip('/').split('/')[-1] == game_id and game.get('pgn'):
+                    return game['pgn']
+        logger.error(f"Game {game_id} was not found in {username}'s games.")
+        return None
+    except Exception as e:
+        logger.error(f"Error fetching game {game_id} for {username}: {e}")
+        return None
+
 
 def _count_moves(pgn_string):
     """

@@ -4,6 +4,7 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from google.oauth2.credentials import Credentials
 from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
 import logging
 from config import YOUTUBE_CLIENT_SECRETS_FILE, YOUTUBE_TOKEN_FILE, YOUTUBE_SCOPES
 
@@ -25,18 +26,26 @@ class YouTubeUploader:
             creds = Credentials.from_authorized_user_file(YOUTUBE_TOKEN_FILE, YOUTUBE_SCOPES)
 
         # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
+        changed = False
+        if creds and not creds.valid and creds.expired and creds.refresh_token:
+            try:
                 creds.refresh(Request())
-            else:
-                if not os.path.exists(YOUTUBE_CLIENT_SECRETS_FILE):
-                    logger.error(f"Client secrets file not found at {YOUTUBE_CLIENT_SECRETS_FILE}")
-                    return False
+                changed = True
+            except RefreshError as e:
+                # expired or revoked: sign in again instead of crashing the run (the video is already made)
+                logger.warning(f"The saved YouTube sign-in no longer works ({e}); sign in again in the browser.")
+                creds = None
+        if not creds or not creds.valid:
+            if not os.path.exists(YOUTUBE_CLIENT_SECRETS_FILE):
+                logger.error(f"Client secrets file not found at {YOUTUBE_CLIENT_SECRETS_FILE}")
+                return False
 
-                flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
-                    YOUTUBE_CLIENT_SECRETS_FILE, YOUTUBE_SCOPES)
-                creds = flow.run_local_server(port=0)
+            flow = google_auth_oauthlib.flow.InstalledAppFlow.from_client_secrets_file(
+                YOUTUBE_CLIENT_SECRETS_FILE, YOUTUBE_SCOPES)
+            creds = flow.run_local_server(port=0)
+            changed = True
 
+        if changed:
             # Save the credentials for the next run
             with open(YOUTUBE_TOKEN_FILE, 'w') as token:
                 token.write(creds.to_json())
@@ -91,6 +100,23 @@ class YouTubeUploader:
         except Exception as e:
             logger.error(f"An error occurred: {e}")
             return None
+
+    def set_thumbnail(self, video_id, image_path):
+        """Sets a custom thumbnail. YouTube refuses it (403) until the channel is phone-verified;
+        the PNG then stays on disk to be uploaded by hand. Returns True when it was set."""
+        try:
+            self.youtube.thumbnails().set(
+                videoId=video_id,
+                media_body=googleapiclient.http.MediaFileUpload(image_path, mimetype="image/png")
+            ).execute()
+            logger.info("Thumbnail set.")
+            return True
+        except googleapiclient.errors.HttpError as e:
+            logger.warning(f"YouTube did not accept the thumbnail ({e.resp.status}: {e.content}). "
+                           f"Upload it by hand in YouTube Studio: {image_path}")
+        except Exception as e:
+            logger.warning(f"Could not set the thumbnail ({e}). Upload it by hand: {image_path}")
+        return False
 
     def get_playlist_id(self, playlist_title):
         """

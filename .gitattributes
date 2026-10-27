@@ -1,0 +1,7 @@
+# Windows batch files must keep CRLF line endings or cmd.exe can misread them.
+*.bat text eol=crlf
+
+# Binary assets used by the renderer
+*.woff2 binary
+*.wav binary
+*.svg text

@@ -1,8 +1,6 @@
 from src.stockfish_engine import StockfishEngine
+from config import STOCKFISH_PATH
 import chess
-
-# Placeholder path - will be replaced by the actual path found
-STOCKFISH_PATH = r"C:\Users\Cognira\Downloads\stockfish-windows-x86-64-avx2\stockfish\stockfish-windows-x86-64-avx2.exe"
 
 def test_engine():
     print(f"Testing Stockfish at: {STOCKFISH_PATH}")

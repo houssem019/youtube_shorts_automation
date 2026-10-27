@@ -1,0 +1,30 @@
+{
+ "title": "The greedy queen that lost the game",
+ "hook": [
+  {"say": "Black's queen eats two pawns and a whole knight, and still gets mated.", "show": "climax"},
+  {"say": "Back to move twelve.", "show": "rewind"}
+ ],
+ "body": [
+  {"say": "The queen already took b2. Now she takes d4 too.", "moves": [{"ply": 24, "word": "takes"}],
+   "effects": [{"type": "zoom", "square": "d4", "word": "takes"}]},
+  {"say": "Both castle, bishop e3 hits her,", "moves": [{"ply": 25, "word": "Both"}, {"ply": 26, "word": "castle"}, {"ply": 27, "word": "bishop"}]},
+  {"say": "and she takes the knight on c3! Minus four.", "moves": [{"ply": 28, "word": "takes"}],
+   "effects": [{"type": "zoom", "square": "c3", "word": "knight", "hold": 1}, {"type": "evalbar", "word": "Minus"}]},
+  {"say": "But she's miles from her king, and that bishop on d3 is aiming at h7.",
+   "effects": [{"type": "arrow", "from": "c3", "to": "g8", "color": "red", "word": "miles"}, {"type": "arrow", "from": "d3", "to": "h7", "color": "orange", "word": "aiming"}]},
+  {"say": "Two moves later,", "skip": [29, 30]},
+  {"say": "bishop takes f6, and g takes f6 is the mistake.", "moves": [{"ply": 31, "word": "bishop"}, {"ply": 32, "word": "g"}],
+   "effects": [{"type": "badge", "square": "f6", "text": "??", "word": "mistake", "hold": 1}]},
+  {"say": "Queen g4 check, king to the corner, queen h4.", "moves": [{"ply": 33, "word": "Queen"}, {"ply": 34, "word": "king"}, {"ply": 35, "word": "h4"}]},
+  {"say": "Queen takes h7 is mate next. Find Black's only move.", "puzzle": true,
+   "effects": [{"type": "arrow", "from": "h4", "to": "h7", "color": "red", "word": "mate"}]},
+  {"say": "Bishop e5? No no no.", "moves": [{"ply": 36, "word": "Bishop"}], "effects": [{"type": "badge", "square": "e5", "text": "??", "word": "No"}]},
+  {"say": "Queen takes h7.", "moves": [{"ply": 37, "word": "takes"}]},
+  {"say": "Checkmate.", "effects": [{"type": "slam", "text": "CHECKMATE", "word": "Checkmate"}]}
+ ],
+ "outro": [
+  {"say": "f5 blocks the bishop, and the mate is gone.", "show": "puzzle_answer",
+   "effects": [{"type": "badge", "square": "f5", "text": "!", "word": "f5"}, {"type": "arrow", "from": "d3", "to": "f5", "color": "orange", "word": "blocks"}]},
+  {"say": "A knight up and mated. Did you see f5?", "show": "final"}
+ ]
+}

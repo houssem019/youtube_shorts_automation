@@ -1,65 +1,49 @@
-# Python
+# ---------- Python ----------
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-env/
-venv/
-ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
 *.egg-info/
-.installed.cfg
-*.egg
+.venv/
+venv/
+env/
+build/
+dist/
 
-# IDE
+# ---------- Editors / OS ----------
 .vscode/
 .idea/
 *.swp
-*.swo
 *~
-
-# Credentials and sensitive files
-client_secrets.json
-*.json.bak
-credentials.json
-token.json
-
-# Generated content
-data/temp/
-*.mp4
-*.mp3
-test_output.*
-
-# Music files (too large for git)
-assets/music/*.mp3
-assets/music/*.wav
-!assets/music/.gitkeep
-
-# Logs
-*.log
-app.log
-
-# OS
 .DS_Store
 Thumbs.db
 desktop.ini
 
-# Data files
-data/game_history.json
-data/music_history.json
+# ---------- Secrets (never commit) ----------
+client_secrets.json
+credentials.json
+token.json
+*.json.bak
+.env
 
-# Test files
-test_*.mp4
-test_*.mp3
+# ---------- Runtime state and logs (created by main.py) ----------
+data/*
+!data/.gitkeep
+*.log
+
+# ---------- Media ----------
+# Background music for the plain render: bring your own, mostly copyrighted.
+assets/music/*
+!assets/music/.gitkeep
+*.mp4
+*.mp3
+edits/
+
+# ---------- Video editor: downloaded / generated ----------
+video_editor/.venv/
+video_editor/models/
+video_editor/studio/node_modules/
+video_editor/studio/out/
+video_editor/studio/public/voice.wav
+video_editor/studio/src/timeline.json
+video_editor/studio/src/game.json
+video_editor/studio/public/long/

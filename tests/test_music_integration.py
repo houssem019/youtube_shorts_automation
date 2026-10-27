@@ -13,7 +13,7 @@ def test_music_integration():
     music_path = music_manager.get_background_music()
 
     if not music_path:
-        print("No music found. Please run create_dummy_music.py first.")
+        print("No music found. Please run scripts/create_dummy_music.py first.")
         return
 
     print(f"Testing with music: {music_path}")
