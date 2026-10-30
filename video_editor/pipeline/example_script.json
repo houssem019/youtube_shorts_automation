@@ -1,8 +1,8 @@
 {
  "title": "The greedy queen that lost the game",
  "hook": [
-  {"say": "Black's queen eats two pawns and a whole knight, and still gets mated.", "show": "climax"},
-  {"say": "Back to move twelve.", "show": "rewind"}
+  {"say": "Black's queen grabs a whole knight. Good idea?", "show": "climax"},
+  {"say": "Watch her king.", "show": "rewind"}
  ],
  "body": [
   {"say": "The queen already took b2. Now she takes d4 too.", "moves": [{"ply": 24, "word": "takes"}],
@@ -25,6 +25,6 @@
  "outro": [
   {"say": "f5 blocks the bishop, and the mate is gone.", "show": "puzzle_answer",
    "effects": [{"type": "badge", "square": "f5", "text": "!", "word": "f5"}, {"type": "arrow", "from": "d3", "to": "f5", "color": "orange", "word": "blocks"}]},
-  {"say": "A knight up and mated. Did you see f5?", "show": "final"}
+  {"say": "A knight up and mated. How fast did you spot f5?", "show": "final"}
  ]
 }

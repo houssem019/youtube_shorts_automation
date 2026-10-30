@@ -39,9 +39,14 @@ This is a highlight, not a replay: don't narrate the whole game. Viewers decide 
 during slow stretches, so spend the words on the moment that decides the game.
 
 Structure:
-- hook: one line (two at most) over a still board that opens a question and grabs right away (show "climax" or
-  "final"), then a very short last line with show "rewind" ("Back to move eighteen.") while the board rewinds.
-  The hook plus the rewind line: 20 words at most.
+- hook: half the viewers swipe away in the first two seconds, so the first line is short and pulls them in. The
+  key move lands on the board in the first half-second (show "climax" or "final") and the first line talks over it:
+  at most 9 words, aimed at the viewer, a challenge or an open question about this game. Don't give the ending away
+  as a statement ("White walked past a forced mate" tells the whole story); keep it a question they stay to see
+  answered. An optional second line (show "climax" or "final"), at most 8 words. Then the last line with show
+  "rewind" plays while the board rewinds: 2-5 words that tell the viewer what to watch ("Watch the knight on f3.",
+  "It starts with one pawn."). Never "Back to move eighteen": the screen already shows "BACK TO MOVE N".
+  The whole hook including the rewind line: 16 words at most.
 - body: pick where the story starts, usually 3-8 moves before the first key moment. The first body line plays that
   ply; the rewind goes straight back to the position before it and the screen shows "BACK TO MOVE N". Earlier
   moves are not shown; if the viewer needs context, say it in a few words ("Twenty moves in, it's dead level.").
@@ -59,7 +64,9 @@ Structure:
   a slam effect; for resignation or time, a line saying so with a slam effect ("RESIGNS" / "TIME!").
 - outro: if there was a puzzle, first reveal the answer in one short line with show "puzzle_answer" (you may add
   effects there), then one short closing line with show "final" (a question that invites a comment). Otherwise
-  just the closing line. Keep the closing line under 12 words; the video loops back to the hook.
+  just the closing line. Keep the closing line under 12 words; the video loops back to the hook. Ask something
+  answered with a move, a choice or a number, not yes/no: two real options from the facts ("Knight f6 or king g2:
+  which do you play?"), the moment it went wrong, how fast they spotted it.
 
 Title: the video's YouTube title, at most 40 characters, about THIS game's story (the turning point, the
 mistake, how it ended), the way a human chess YouTuber would title it. It must be true to the facts. Sentence

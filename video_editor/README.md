@@ -49,8 +49,8 @@ video_editor\.venv\Scripts\python video_editor\make_short.py --pgn game.pgn --ou
 `setup_check.py` re-checks Stockfish, the voices and the Claude CLI.
 
 ## Script format
-See the docstring in `pipeline/script_schema.py`: `title`, `hook` (lines over a still board, the last one plays
-the rewind), `body` (starts at any ply, the rewind goes back to it; from there every ply exactly once, as `moves`
+See the docstring in `pipeline/script_schema.py`: `title`, `hook` (the moves into the key moment play in the
+first ~1.2 s under the first line; the last line plays the rewind), `body` (starts at any ply, the rewind goes back to it; from there every ply exactly once, as `moves`
 anchored to spoken words, `spread` over a line, or `skip` = fast-forward in under 2 s),
 `outro`, and effects (`arrow`, `badge`, `ring`, `zoom`, `evalbar`, `slam`) anchored to words.
 `pipeline/example_script.json` is the hand-written example given to Claude.

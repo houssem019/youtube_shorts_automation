@@ -47,3 +47,9 @@ video_editor/studio/public/voice.wav
 video_editor/studio/src/timeline.json
 video_editor/studio/src/game.json
 video_editor/studio/public/long/
+
+# ---------- product/ (the skill to sell): installed / generated ----------
+product/youtube-shorts-automation/studio/node_modules/
+product/youtube-shorts-automation/studio/out/
+product/youtube-shorts-automation/studio/public/short/
+product/youtube-shorts-automation/studio/public/chess/

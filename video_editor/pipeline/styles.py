@@ -123,11 +123,11 @@ STYLES = [
 Hook (show "climax"): open on the missed chance, not on the result. Make the viewer want to see the mate.
 Body: start a few moves before that moment; when it comes, slow down, show the mating idea with a green arrow,
 and badge the move that was played instead. Then skip to the finish.
-Outro: ask whether the viewer would have seen the mate.
+Outro: ask the viewer which move they would have played there.
 Title: about the missed mate (e.g. "Black had mate in 2 and played this"). Don't copy this example."""),
     dict(id='time_scramble', name='Race against the clock', score=8, fits=_time_scramble,
          brief="""Angle: the clock is a third player. Use the clock facts (say times as "eight seconds", "under a minute").
-Hook (show "final"): lead with how little time was left, then the result.
+Hook (show "final"): lead with how little time was left; let the viewer wonder who survives it.
 Body: start where the clocks get low; mention the time left once or twice so the tension rises. Skip quiet
 stretches. Short lines near the end.
 Outro: ask what the viewer does in a time scramble.
@@ -144,11 +144,11 @@ Title: about the lost advantage (e.g. "Up a whole piece and still lost"). Don't 
 Hook (show "final"): set up the challenge directly ("There's one move in this game that wins. You get three
 seconds."). Don't reveal the position or the answer in the hook.
 Body: play the game toward the puzzle position with a little suspense; the puzzle line is required here.
-Outro: reveal the answer (show "puzzle_answer"), say what was played instead, then ask if they found it.
+Outro: reveal the answer (show "puzzle_answer"), say what was played instead, then ask how fast they found it.
 Title: a challenge to the viewer, without the answer (e.g. "Can you find what White missed?"). Don't copy this example."""),
     dict(id='underdog', name='The underdog', score=7, fits=_underdog,
          brief="""Angle: the lower-rated player wins. Use the rating facts once in the hook, then let the chess speak.
-Hook (show "final"): state the rating gap and the result.
+Hook (show "final"): state the rating gap and ask who the viewer backs; the result comes at the end.
 Body: point out the moment the favourite starts to go wrong, and give the underdog credit for good moves.
 Outro: ask if ratings really matter at this level.
 Title: about the rating gap (e.g. "100 points lower, didn't matter"). Don't copy this example."""),
@@ -171,11 +171,11 @@ Title: about how fast it was (e.g. "Over in 14 moves"). Don't copy this example.
 Hook (show "climax"): point at the endgame moment where it was finally decided.
 Body: start in the endgame and say how long they've been fighting; skip quiet endgame moves; slow down at the
 slip and explain the plan (arrows for king walks, passed pawns, the key square).
-Outro: ask the viewer whether they would have held the endgame.
+Outro: ask the viewer where they would have defended differently.
 Title: about the endgame or the long fight (e.g. "40 moves of pressure, one slip"). Don't copy this example."""),
     dict(id='turning_point', name='The one move', score=3, fits=_decisive,
          brief="""Angle: one move decided the game. This is the classic format.
-Hook (show "climax"): open on the decisive moment and say why it matters, then show the result.
+Hook (show "climax"): open on the decisive moment and challenge the viewer with it; don't say how it ends.
 Body: start a few moves before the turning point, slow down on it, explain the idea and the better move.
 Outro: ask what the viewer would have played.
 Title: about the key move."""),

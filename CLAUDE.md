@@ -31,7 +31,12 @@ Read this before changing anything.
   game that has no video of that format yet (`get_random_unedited_game`). The "newest game" pick was removed on
   2026-10-21 (my latest game is often a bad loss). Shorts and long videos have separate histories
   (`history.json` / `history_long.json`), so one game can get both.
-- Shorts are finished: don't keep reworking them. The focus is long-form videos (see below).
+- Shorts are finished: don't keep reworking them. The focus is long-form videos (see below). Exception, 2026-10-30:
+  the hook was changed after the hook research (`research/`; views stuck ~1K, ~50% "stayed to watch"): the moves into
+  the key move play from frame 3 instead of a frozen board (every look), the first line is <= 9 words aimed at the
+  viewer and doesn't state the ending, the rewind line says what to watch (never "Back to move N", the screen shows
+  it), the closing question is answered with a move/choice, not yes/no. The owner uploads for a few days, then we
+  compare "stayed to watch" with the Shorts before it. The template writer still says "Back to move N" (fallback).
 - Length: 45-50 s highlights (since 2026-10-19; ~90 s full-game replays were too long, viewers skipped). Don't make
   it shorter by talking faster: the first edit was "too fast and hard to follow". The rewind goes straight to a
   few moves before the key moment, quiet stretches use "skip" (fast-forward), and `make_short.py` has Claude
@@ -71,6 +76,8 @@ video_editor/make_short.py            the editor CLI; pipeline/ (analysis, story
 video_editor/make_long.py             the long-video CLI; pipeline/long/ (openings + Lichess opening tables,
                                       deep engine pass, motifs, schema, writer, briefs, timeline);
                                       studio/src/long/ (ChessLong 1920x1080 + ChessThumb 1280x720)
+research/hook_research.py             standalone: yt-dlp + ffmpeg + faster-whisper study of outlier chess Shorts'
+                                      first seconds vs ours (own venv research/.venv; output data/research/report.md)
 tests/                                manual check scripts (python -m tests.test_pick / test_stockfish from the root)
 scripts/create_dummy_music.py         makes a test music file for the plain renderer
 data/ (git-ignored)                   history.json, history_long.json, editor_voice.json, editor_style.json,
@@ -151,6 +158,16 @@ renders unless needed; `python main.py` runs upload to YouTube, so test with the
   a leftover from the example game.
 - `assets/music/DxDiag.txt` (a system report) and `data/history.json` were in the first commit; they are
   untracked now but remain in that commit's history. Publish from a fresh history if the repo goes public.
+
+## product/: the sellable skill (since 2026-10-27)
+`product/youtube-shorts-automation/` is a Claude skill built from this project, to sell on Capafy (capafy.ai) as a
+one-time download. It is channel-first and general: a channel profile (niche, tone, source, hashtags) -> the next
+unused item from the source (rss / links / topics / folder / ... / chess) -> a fact-checked script written by Claude
+-> Kokoro voice -> generic Remotion `Short` (8 scene types) -> YouTube upload. The chess pipeline is copied in as a
+separate free add-on skill, `product/youtube-shorts-chess-connector/` (GPL-3.0 because of python-chess), found by the
+main skill as a sibling folder. It's a separate copy:
+changing it never touches `video_editor/` or `main.py`, and vice versa. The user data folder is `~/.youtube-shorts-automation/`.
+Listing copy, pricing and examples are in `product/listing/`; `python product/build.py` makes `product/dist/publish/` (what Capafy-Publisher publishes) and the zips.
 
 ## Housekeeping
 - `edits/` holds sample videos and previews and is git-ignored, as are the venv, models, node_modules,

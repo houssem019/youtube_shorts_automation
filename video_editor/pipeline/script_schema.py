@@ -3,7 +3,7 @@
 A script is JSON:
 {
   "title": str,                                                            # YouTube title, max 40 characters
-  "hook": [{"say": str, "show": "climax" | "final" | "rewind"}],          # 1-3 lines over a still board
+  "hook": [{"say": str, "show": "climax" | "final" | "rewind"}],          # 1-3 lines; the key move plays in under the first
   "body":  [{"say": str,
              "moves":  [{"ply": int, "word": str}],      # a move lands when that word is spoken
              "spread": [first_ply, last_ply],            # or: play a run of quiet moves across the line

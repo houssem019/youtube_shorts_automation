@@ -108,8 +108,23 @@ def build(a: dict, s: dict, script: dict, studio: Path, narrator: Narrator, voic
                 sfx(0, 'riser', 0.35)
                 sfx(land, 'boom', 0.55)
                 continue
-            TL['statics'].append(dict(ply=ply, fallen=mate_end and ply == n, **{'from': _f(frm), 'to': _f(p['next'])}))
-            TL['cams'].append(dict(sq=sq, peak=zoom(1.16), **{'from': _f(frm) - 8, 'to': _f(p['next'])}))
+            if k == 0:
+                # never open on a frozen board: the last moves into the key move play from frame 3 (move sounds + eval
+                # swing) and the key move lands at about 1.1 s
+                first = max(1, ply - 2)
+                t0 = frm + 0.1
+                TL['statics'].append(dict(ply=first - 1, fallen=False, **{'from': _f(frm), 'to': _f(t0)}))
+                for j, q in enumerate(range(first, ply + 1)):
+                    TL['beats'].append(dict(ply=q, at=_f(t0 + 0.35 * j), dur=9, hook=True))
+                land = _f(t0 + 0.35 * (ply - first)) + 9
+                TL['statics'].append(dict(ply=ply, fallen=mate_end and ply == n, **{'from': land, 'to': _f(p['next'])}))
+                if look['opener'] != 'headline':  # the headline has its own boom
+                    sfx(land / FPS, 'boom', 0.45)
+                cam_from = land - 4
+            else:
+                TL['statics'].append(dict(ply=ply, fallen=mate_end and ply == n, **{'from': _f(frm), 'to': _f(p['next'])}))
+                cam_from = _f(frm) - 8
+            TL['cams'].append(dict(sq=sq, peak=zoom(1.16), **{'from': cam_from, 'to': _f(p['next'])}))
             if k == 0 and look['opener'] == 'headline' and look.get('headline'):
                 TL['headline'] = dict(text=look['headline'], **{'from': 4, 'to': _f(p['next'])})
                 sfx(0.13, 'boom', 0.6)
